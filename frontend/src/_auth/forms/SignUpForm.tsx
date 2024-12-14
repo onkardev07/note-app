@@ -302,7 +302,7 @@ export default function App() {
           Already have an account?{" "}
           <a
             href="/signin"
-            className="text-blue-500 underline hover:text-blue-700 font-sans font-medium"
+            className="text-blue-500 ml-1 underline hover:text-blue-700 font-sans font-medium"
           >
             Sign in
           </a>
