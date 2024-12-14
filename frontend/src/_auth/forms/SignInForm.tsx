@@ -94,18 +94,11 @@ export default function App() {
             />
           </Box>
         </div>
-        <p className="text-[#969696] text-sm md:text-base mt-1 font-sans">
-          <a
-            href="/reset-password"
-            className="text-blue-500  underline hover:text-blue-700 font-sans font-medium"
-          >
-            Forgot Password
-          </a>
+
+        <p className="text-blue-500 underline hover:text-blue-700 font-sans font-medium text-left w-full">
+          <a href="/reset-password">Forgot Password</a>
         </p>
-        <p
-          className="text-[#969696] text-sm md:text-base mt-1 font-sans"
-          style={{ marginLeft: "-10px" }}
-        >
+        <p className="text-[#969696] text-sm md:text-base mt-1 font-sans text-left w-full flex items-center -ml-2.5">
           <Checkbox {...label} />
           Keep me logged in
         </p>
@@ -219,7 +212,7 @@ export default function App() {
             href="/signup"
             className="text-blue-500 ml-1 underline hover:text-blue-700 font-sans font-medium"
           >
-            a Create one
+            Create one
           </a>
         </p>
       </form>
