@@ -16,5 +16,7 @@ export const SignupValidation = z.object({
 
 export const SigninValidation = z.object({
   email: z.string().email({ message: "Invalid email address." }),
-  otp: z.string().min(6, { message: "OTP must be at least 6 characters." }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters." }),
 });

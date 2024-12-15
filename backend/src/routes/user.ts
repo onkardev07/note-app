@@ -51,7 +51,6 @@ router.post("/signup", async (req: any, res: any) => {
 router.post("/signin", async (req: any, res: any) => {
   const body = req.body;
 
-  // Validate the request body
   const parsedData = SigninSchema.safeParse(body);
   if (!parsedData.success) {
     return res.status(411).json({
@@ -87,8 +86,16 @@ router.post("/signin", async (req: any, res: any) => {
     { expiresIn: "1h" }
   );
 
+  // Store the token in an HTTP-only cookie
+  res.cookie("access_token", token, {
+    httpOnly: true,
+    // secure: process.env.NODE_ENV === "production",
+    // sameSite: "strict",
+    maxAge: 3600 * 1000,
+  });
+
   return res.json({
-    token,
+    message: "Sign-in successful",
   });
 });
 
@@ -107,6 +114,22 @@ router.get("/", authMiddleware, async (req: any, res: any) => {
 
   return res.json({
     user,
+  });
+});
+
+router.get("/auth/check", authMiddleware, (req, res) => {
+  res.status(200).json({ isAuthenticated: true });
+});
+
+router.post("/logout", (req: any, res: any) => {
+  res.clearCookie("access_token", {
+    httpOnly: true,
+    // secure: process.env.NODE_ENV === "production",
+    // sameSite: "strict",
+  });
+
+  return res.status(200).json({
+    message: "Successfully logged out",
   });
 });
 

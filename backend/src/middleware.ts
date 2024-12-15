@@ -11,7 +11,7 @@ export function authMiddleware(
   res: Response,
   next: NextFunction
 ): void {
-  const token = req.headers.authorization;
+  const token = req.cookies?.access_token;
 
   if (!token) {
     res.status(403).json({ message: "Authorization token is missing" });
@@ -24,5 +24,6 @@ export function authMiddleware(
     next();
   } catch (e) {
     res.status(403).json({ message: "You are not logged in" });
+    return;
   }
 }

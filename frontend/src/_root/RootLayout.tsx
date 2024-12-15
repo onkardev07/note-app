@@ -5,7 +5,6 @@ const RootLayout = () => {
   return (
     <div className="w-full flex flex-col">
       <Topbar />
-
       <Outlet />
     </div>
   );
