@@ -12,6 +12,10 @@ import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BASE_URL } from "../../apiUrl";
+import { Loader } from "lucide-react";
 import { SigninValidation } from "../../lib/validation";
 
 type FormData = z.infer<typeof SigninValidation>;
@@ -37,9 +41,30 @@ export default function App() {
     event.preventDefault();
   };
 
-  const onSubmit = (data: FormData) => {
-    console.log("Form Submitted Successfully:", data);
-    alert(JSON.stringify(data));
+  const [loading, setLoading] = React.useState(false);
+  const [apiError, setApiError] = React.useState<string | null>(null);
+
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: FormData) => {
+    setLoading(true);
+    setApiError(null);
+    try {
+      const response = await axios.post(`${BASE_URL}/user/signin`, data, {
+        withCredentials: true,
+      });
+      console.log("Form Submitted Successfully:", response.data);
+      navigate("/dashboard");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setApiError(
+          error.response?.data?.message ||
+            "An unexpected error occurred. Please try again."
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -94,7 +119,6 @@ export default function App() {
             />
           </Box>
         </div>
-
         <p className="text-blue-500 underline hover:text-blue-700 font-sans font-medium text-left w-full">
           <a href="/reset-password">Forgot Password</a>
         </p>
@@ -102,7 +126,6 @@ export default function App() {
           <Checkbox {...label} />
           Keep me logged in
         </p>
-
         <div>
           <FormControl
             sx={{
@@ -118,16 +141,17 @@ export default function App() {
               },
             }}
             variant="outlined"
+            error={!!errors.password}
           >
-            <InputLabel htmlFor="otp">OTP</InputLabel>
+            <InputLabel htmlFor="password">Password</InputLabel>
             <Controller
-              name="otp"
+              name="password"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <OutlinedInput
                   {...field}
-                  id="otp"
+                  id="password"
                   type={showPassword ? "text" : "password"}
                   size="small"
                   sx={{
@@ -156,12 +180,22 @@ export default function App() {
                 />
               )}
             />
+
+            {errors.password && (
+              <Typography
+                variant="body2"
+                color="error"
+                sx={{ marginTop: "4px" }}
+              >
+                {errors.password.message}
+              </Typography>
+            )}
           </FormControl>
         </div>
-
         <Button
           type="submit"
           variant="contained"
+          disabled={loading}
           sx={{
             width: "35ch",
             height: "40px",
@@ -173,8 +207,18 @@ export default function App() {
             },
           }}
         >
-          Sign In
+          {loading ? (
+            <Loader className="animate-spin mx-auto" size={25} color="white" />
+          ) : (
+            "Sign In"
+          )}
         </Button>
+
+        {apiError && (
+          <Typography variant="body2" color="error" sx={{ marginTop: 1 }}>
+            {apiError}
+          </Typography>
+        )}
         <div className="flex items-center my-4">
           <Divider sx={{ width: "17.2ch" }} />
 
@@ -183,9 +227,8 @@ export default function App() {
           </Typography>
           <Divider sx={{ width: "17.2ch" }} />
         </div>
-
         <Button
-          type="submit"
+          // type="submit"
           variant="contained"
           sx={{
             width: "35ch",

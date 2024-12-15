@@ -7,7 +7,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
 import { Button, Box, Divider, Typography } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
-
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -16,6 +15,10 @@ import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import React from "react";
+
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BASE_URL } from "../../apiUrl";
 import { SignupValidation } from "../../lib/validation";
 
 type FormData = z.infer<typeof SignupValidation>;
@@ -33,6 +36,9 @@ export default function App() {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const [loading, setLoading] = React.useState(false);
+  const [apiError, setApiError] = React.useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -40,9 +46,23 @@ export default function App() {
     event.preventDefault();
   };
 
-  const onSubmit = (data: FormData) => {
-    console.log("Form Submitted Successfully:", data);
-    alert(JSON.stringify(data));
+  const onSubmit = async (data: FormData) => {
+    setLoading(true);
+    setApiError(null);
+    try {
+      const response = await axios.post(`${BASE_URL}/user/signup`, data);
+      console.log("Form Submitted Successfully:", response.data);
+      navigate("/signin");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setApiError(
+          error.response?.data?.message ||
+            "An unexpected error occurred. Please try again."
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -210,16 +230,17 @@ export default function App() {
               },
             }}
             variant="outlined"
+            error={!!errors.password}
           >
-            <InputLabel htmlFor="otp">OTP</InputLabel>
+            <InputLabel htmlFor="password">Password</InputLabel>
             <Controller
-              name="otp"
+              name="password"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <OutlinedInput
                   {...field}
-                  id="otp"
+                  id="password"
                   type={showPassword ? "text" : "password"}
                   size="small"
                   sx={{
@@ -248,25 +269,43 @@ export default function App() {
                 />
               )}
             />
+
+            {errors.password && (
+              <Typography
+                variant="body2"
+                color="error"
+                sx={{ marginTop: "4px" }}
+              >
+                {errors.password.message}
+              </Typography>
+            )}
           </FormControl>
         </div>
 
         <Button
           type="submit"
           variant="contained"
+          disabled={loading}
           sx={{
             width: "35ch",
             height: "40px",
             fontSize: "16px",
             textTransform: "none",
-            backgroundColor: "#367aff",
+            backgroundColor: loading ? "gray" : "#367aff",
             "&:hover": {
-              backgroundColor: "#2957d0",
+              backgroundColor: loading ? "gray" : "#2957d0",
             },
           }}
         >
-          Sign Up
+          {loading ? "Submitting..." : "Sign Up"}
         </Button>
+
+        {apiError && (
+          <Typography variant="body2" color="error" sx={{ marginTop: 1 }}>
+            {apiError}
+          </Typography>
+        )}
+
         <div className="flex items-center my-4">
           <Divider sx={{ width: "17.2ch" }} />
 
@@ -277,7 +316,6 @@ export default function App() {
         </div>
 
         <Button
-          type="submit"
           variant="contained"
           sx={{
             width: "35ch",
