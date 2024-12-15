@@ -9,7 +9,9 @@ export const SignupValidation = z.object({
     message: "Date of Birth must be in YYYY-MM-DD format.",
   }),
   email: z.string().email({ message: "Invalid email address." }),
-  otp: z.string().min(6, { message: "OTP must be at least 6 characters." }),
+  password: z
+    .string()
+    .min(6, { message: "OTP must be at least 6 characters." }),
 });
 
 export const SigninValidation = z.object({

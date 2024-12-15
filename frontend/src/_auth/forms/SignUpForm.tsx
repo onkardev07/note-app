@@ -211,15 +211,15 @@ export default function App() {
             }}
             variant="outlined"
           >
-            <InputLabel htmlFor="otp">OTP</InputLabel>
+            <InputLabel htmlFor="password">Password</InputLabel>
             <Controller
-              name="otp"
+              name="password"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <OutlinedInput
                   {...field}
-                  id="otp"
+                  id="password"
                   type={showPassword ? "text" : "password"}
                   size="small"
                   sx={{
