@@ -3,6 +3,7 @@ import cors from "cors";
 // @ts-ignore
 import cookieParser from "cookie-parser";
 import { userRouter } from "./routes/user";
+import { noteRouter } from "./routes/note";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/note", noteRouter);
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");

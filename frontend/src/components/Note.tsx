@@ -1,19 +1,25 @@
 const Note = ({
-  noteNumber,
+  noteId,
+  content,
   onDelete,
 }: {
-  noteNumber: number;
-  onDelete: (noteNumber: number) => void;
+  noteId: number;
+  content: string;
+  onDelete: (id: number) => void;
 }) => {
   return (
-    <div className="w-full h-[50px] border-2 border-[#D9D9D9] shadow-md bg-[#ffff] rounded-md flex p-4 justify-between items-center">
-      <div>Note {noteNumber}</div>
-      <div>
+    <div className="border-2 border-gray-300 rounded-md p-4 shadow-md flex items-center ">
+      <div className="w-[90%] break-words pr-2">
+        <p className="font-medium">Note #{noteId}</p>
+        <p className="">{content}</p>
+      </div>
+
+      <div className="w-[10%]">
         <img
           src="/assets/icons/delete.svg"
           alt="delete icon"
           className="cursor-pointer"
-          onClick={() => onDelete(noteNumber)}
+          onClick={() => onDelete(noteId)}
         />
       </div>
     </div>

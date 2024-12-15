@@ -10,7 +10,7 @@ export default function AuthLayout() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/auth/check`, {
+        const response = await axios.get(`${BASE_URL}/user/auth/check`, {
           withCredentials: true,
         }); // Include cookies
         setIsAuthenticated(response.data.isAuthenticated);

@@ -50,7 +50,7 @@ export default function App() {
     setLoading(true);
     setApiError(null);
     try {
-      const response = await axios.post(`${BASE_URL}/signup`, data);
+      const response = await axios.post(`${BASE_URL}/user/signup`, data);
       console.log("Form Submitted Successfully:", response.data);
       navigate("/signin");
     } catch (error) {
