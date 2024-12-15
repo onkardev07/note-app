@@ -9,7 +9,7 @@ const Topbar = () => {
     e.preventDefault();
     try {
       await axios.post(
-        `${BASE_URL}/logout`,
+        `${BASE_URL}/user/logout`,
         {},
         {
           withCredentials: true,
