@@ -49,10 +49,14 @@ export default function App() {
   const onSubmit = async (data: FormData) => {
     setLoading(true);
     setApiError(null);
+
     try {
-      const response = await axios.post(`${BASE_URL}/user/signin`, data, {
-        withCredentials: true,
-      });
+      const response = await axios.post(`${BASE_URL}/user/signin`, data);
+      const { token } = response.data; // Extract the token from the response
+
+      // Store the token in localStorage
+      localStorage.setItem("authToken", token);
+
       console.log("Form Submitted Successfully:", response.data);
       navigate("/dashboard");
     } catch (error) {

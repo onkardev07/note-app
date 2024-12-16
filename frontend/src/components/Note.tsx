@@ -8,13 +8,14 @@ const Note = ({
   onDelete: (id: number) => void;
 }) => {
   return (
-    <div className="border-2 border-gray-300 rounded-md p-4 shadow-md flex items-center ">
-      <div className="w-[90%] break-words pr-2">
-        <p className="font-medium">Note #{noteId}</p>
-        <p className="">{content}</p>
+    <div className="border-2 border-gray-300 rounded-md p-4 shadow-md flex items-start justify-between gap-3">
+      <div className="flex-1 min-w-0">
+        <p className="whitespace-normal break-words overflow-hidden">
+          {content}
+        </p>
       </div>
 
-      <div className="w-[10%]">
+      <div className="flex-shrink-0">
         <img
           src="/assets/icons/delete.svg"
           alt="delete icon"
