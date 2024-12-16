@@ -1,25 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { BASE_URL } from "../apiUrl";
 
 const Topbar = () => {
   const navigate = useNavigate();
 
-  const handleSignOut = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleSignOut = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    try {
-      await axios.post(
-        `${BASE_URL}/user/logout`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
 
-      navigate("/signin");
-    } catch (error) {
-      console.error("Error during sign out:", error);
-    }
+    localStorage.removeItem("authToken");
+
+    navigate("/signin");
   };
 
   return (

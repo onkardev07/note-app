@@ -1,23 +1,23 @@
 import { useState, useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import axios from "axios";
-import { BASE_URL } from "../apiUrl";
 import { Loader } from "lucide-react";
 
 export default function AuthLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/user/auth/check`, {
-          withCredentials: true,
-        }); // Include cookies
-        setIsAuthenticated(response.data.isAuthenticated);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
+    const checkAuth = () => {
+      const token = localStorage.getItem("authToken");
+
+      if (token) {
+        try {
+          setIsAuthenticated(true);
+        } catch (error) {
+          console.error("Invalid token", error);
           setIsAuthenticated(false);
         }
+      } else {
+        setIsAuthenticated(false);
       }
     };
 

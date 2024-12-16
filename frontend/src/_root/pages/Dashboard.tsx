@@ -31,12 +31,21 @@ const Dashboard = () => {
     setNoteContent("");
   };
 
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("authToken");
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  };
+
   const addNote = async () => {
     try {
       const response = await axios.post(
         `${BASE_URL}/note/create`,
         { data: noteContent },
-        { withCredentials: true }
+        getAuthHeaders()
       );
 
       const { noteId } = response.data;
@@ -55,9 +64,7 @@ const Dashboard = () => {
 
   const deleteNote = async (noteId: number) => {
     try {
-      await axios.delete(`${BASE_URL}/note/${noteId}`, {
-        withCredentials: true,
-      });
+      await axios.delete(`${BASE_URL}/note/${noteId}`, getAuthHeaders());
 
       setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
     } catch (error) {
@@ -69,15 +76,16 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userResponse = await axios.get(`${BASE_URL}/user/`, {
-          withCredentials: true,
-        });
+        const userResponse = await axios.get(
+          `${BASE_URL}/user/`,
+          getAuthHeaders()
+        );
         setUser(userResponse.data.user);
 
-        const notesResponse = await axios.get(`${BASE_URL}/note/`, {
-          withCredentials: true,
-        });
-
+        const notesResponse = await axios.get(
+          `${BASE_URL}/note/`,
+          getAuthHeaders()
+        );
         setNotes(notesResponse.data.notes);
       } catch (error) {
         console.error("Error fetching data:", error);
