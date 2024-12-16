@@ -11,12 +11,16 @@ export function authMiddleware(
   res: Response,
   next: NextFunction
 ): void {
-  const token = req.cookies?.access_token;
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
-    res.status(403).json({ message: "Authorization token is missing" });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    res
+      .status(403)
+      .json({ message: "Authorization token is missing or invalid" });
     return;
   }
+
+  const token = authHeader.split(" ")[1];
 
   try {
     const payload = jwt.verify(token, JWT_PASSWORD) as JwtPayload;
