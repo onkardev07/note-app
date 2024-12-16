@@ -11,6 +11,27 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: note-app-backend
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@note-app-db:5432/${POSTGRES_DB}"
+      JWT_PASSWORD: ${JWT_PASSWORD}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
