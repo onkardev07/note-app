@@ -1,117 +1,91 @@
-Quick Start
+# **Note App**
 
-Prerequisites
+## **Quick Start**
 
-Make sure you have the following installed on your machine:
+### **Prerequisites**
 
-Git
+Ensure the following tools are installed on your system:
 
-Node.js
+- **Git**
+- **Node.js**
+- **npm (Node Package Manager)**
+- **Docker & Docker Compose**
 
-npm (Node Package Manager)
+### **Steps to Set Up the Application**
 
-Docker & Docker Compose
+1. **Clone the Repository**  
+   Clone the repository to your local machine:
+   ```bash
+   git clone git@github.com:onkardev07/note-app.git
+   cd note-app
+   ```
+2. **Set Up Environment Variables**
 
-Cloning the Repository
+   - Navigate to the `docker` folder:
+     ```bash
+     cd docker
+     ```
+   - Create a `.env` file and add the following content:
+     ```
+     POSTGRES_USER=your-username
+     POSTGRES_PASSWORD=your-password
+     POSTGRES_DB=your-db-name
+     ```
 
-Clone the repository to your local machine:
+3. **Start PostgreSQL with Docker**  
+   Run the following command to start the PostgreSQL container:
+   ```bash
+   docker-compose up -d --build
+   ```
+4. **Set Up the Backend**
 
-git clone git@github.com:onkardev07/note-app.git
-cd note-app
+   - Navigate to the `backend` folder:
+     ```bash
+     cd backend
+     ```
+   - Create a `.env` file and add the following content:
+     ```
+     DATABASE_URL="postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/{POSTGRES_DB}"
+     JWT_PASSWORD=your-jwt-secret
+     ```
+   - Install Node.js dependencies:
+     ```bash
+     npm install
+     ```
+   - Generate the Prisma client:
+     ```bash
+     npx prisma generate
+     ```
+   - Apply database migrations:
+     ```bash
+     npx prisma migrate dev
+     ```
+   - Compile TypeScript code:
+     ```bash
+     npx tsc -b
+     ```
+   - Start the backend server:
+     ```bash
+     node dist/index.js
+     ```
 
-Set Up Environment Variables
+5. **Set Up the Frontend**
 
-1. Configure PostgreSQL Environment
+   - Navigate to the `frontend` folder:
+     ```bash
+     cd frontend
+     ```
+   - Install dependencies:
+     ```bash
+     npm install
+     ```
+   - Run the development server:
+     ```bash
+     npm run dev
+     ```
 
-Navigate to the docker folder and create a .env file:
-
-cd docker
-
-Create a file named .env and add the following content:
-
-POSTGRES_USER=your-username
-POSTGRES_PASSWORD=your-password
-POSTGRES_DB=your-db-name
-
-2. Start PostgreSQL with Docker
-
-Run the following command to start PostgreSQL using Docker Compose:
-
-docker-compose up -d --build
-
-3. Backend Environment Setup
-
-Navigate to the backend folder:
-
-cd backend
-
-Create a file named .env and add the following content:
-
-DATABASE_URL="postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/{POSTGRES_DB}"
-JWT_PASSWORD=your-jwt-secret
-
-4. Install Dependencies & Set Up Prisma
-
-Install the required Node modules:
-
-npm install
-
-If the Prisma client is not generated, run:
-
-npx prisma generate
-
-If the database migrations are not applied, run:
-
-npx prisma migrate dev
-
-5. Compile TypeScript
-
-If TypeScript is not installed globally, install it:
-
-npm install -g typescript
-
-Compile the TypeScript code:
-
-npx tsc -b
-
-6. Start the Backend Server
-
-Run the backend server:
-
-node dist/index.js
-
-Start the Frontend
-
-Navigate to the frontend folder:
-
-cd frontend
-
-Install the dependencies:
-
-npm install
-
-Run the development server:
-
-npm run dev
-
-Access the Application
-
-Once both backend and frontend are running, you can access the application in your browser:
-
-http://localhost:5173
-
-Notes:
-
-Replace your-username, your-password, and your-db-name with your actual PostgreSQL credentials.
-
-Replace your-jwt-secret with a secure JWT password for authentication.
-
-Ensure Docker is running when starting the PostgreSQL container.
-
-Common Issues
-
-If Prisma throws an error, check the .env file and ensure your database is running.
-
-If TypeScript compilation fails, ensure TypeScript is installed globally or locally.
-
-Deployed at:http://15.206.178.231/
+6. **Access the Application**  
+   Open the application in your browser at:  
+   [http://localhost:5173](http://localhost:5173)
+   Deployed at:
+   [http://15.206.178.231/]
